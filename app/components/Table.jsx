@@ -14,11 +14,13 @@ function MoreInfo({
     return (
       <ul className="tooltip stack">
         <li className="split">
-          <span>By:</span> <span>{login}</span>
+                <span>By:</span>
+                <span>{login}</span>
         </li>
         {language && (
           <li className="split">
-            <span>Language:</span> <span>{language}</span>
+                    <span>Language:</span>
+                    <span>{language}</span>
           </li>
         )}
         <li className="split">
@@ -90,6 +92,7 @@ function TableRow({
                         updated_at={updated_at}
                         watchers={watchers}
                         type={type}
+                        login={login}
                     />
                 }>
                     <div className='row gap-md'>
