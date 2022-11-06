@@ -1,6 +1,7 @@
 import * as React from "react";
 import { NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
+import { sunIcon, moonIcon } from "./icons";
 
 export default function Nav({ theme, toggleTheme }) {
   return (
@@ -32,7 +33,9 @@ export default function Nav({ theme, toggleTheme }) {
           </NavLink>
         </li>
         <li>
-          <button className="btn secondary icon" onClick={toggleTheme}></button>
+          <button className="btn secondary icon" onClick={toggleTheme}>
+            {theme === "light" ? moonIcon : sunIcon}
+          </button>
         </li>
       </ul>
     </nav>
