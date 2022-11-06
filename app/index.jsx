@@ -28,7 +28,7 @@ class App extends React.Component {
       <Router>
         <div className={this.state.theme}>
           <div className="container">
-            <Nav />
+            <Nav theme={this.state.theme} toggleTheme={this.toggleTheme} />
             <Routes>
               <Route path="/" element={<Popular />} />
               <Route path="/battle" element={<Battle />} />
