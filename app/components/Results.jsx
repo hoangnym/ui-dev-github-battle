@@ -3,6 +3,7 @@ import { battle } from "../utils/api";
 import PropTypes from "prop-types";
 import Loading from "./Loading";
 import withSearchParams from "./withSearchParams";
+import { Link } from "react-router-dom";
 
 function Card({ profile }) {
   const {
@@ -116,6 +117,9 @@ class Results extends React.Component {
       <main className="animate-in stack main-stack">
         <div className="split">
           <h1>Results</h1>
+          <Link to="/battle" className="btn secondary">
+            Reset
+          </Link>
           {/* <pre>{JSON.stringify(this.props, null, 2) }</pre> */}
         </div>
         <section className="grid">
