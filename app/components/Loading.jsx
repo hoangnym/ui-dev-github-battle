@@ -41,7 +41,7 @@ Delayed.propTypes = {
 
 export default class Loading extends React.Component {
   state = {
-    content: props.text,
+    content: this.props.text,
   };
 
   componentDidMount() {
