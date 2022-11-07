@@ -1,89 +1,81 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { fetchPopularRepos } from '../utils/api'
-import Table from './Table'
+import * as React from "react";
+import PropTypes from "prop-types";
+import { fetchPopularRepos } from "../utils/api";
+import Table from "./Table";
 
-function LanguagesNav( { selected, onUpdateLanguage }) {
-    const languages = ["All", "JavaScript", "Ruby", "Java", "CSS", "Python"]
+function LanguagesNav({ selected, onUpdateLanguage }) {
+  const languages = ["All", "JavaScript", "Ruby", "Java", "CSS", "Python"];
 
-    return (
-        <select
-                onChange={(e) => onUpdateLanguage(e.target.value)}
-                selected={selected}
-        >
-            {languages.map((language) => (
-                <option key={language} value={language}>
-                    {language}
-                </option>
-            ))}
-        </select>
-    )
+  return (
+    <select
+      onChange={(e) => onUpdateLanguage(e.target.value)}
+      selected={selected}
+    >
+      {languages.map((language) => (
+        <option key={language} value={language}>
+          {language}
+        </option>
+      ))}
+    </select>
+  );
 }
 
 LanguagesNav.propTypes = {
-    selected: PropTypes.string.isRequired,
-    onUpdateLanguage: PropTypes.func.isRequired,
-}
+  selected: PropTypes.string.isRequired,
+  onUpdateLanguage: PropTypes.func.isRequired,
+};
 
 export default class Popular extends React.Component {
+  state = {
+    selectedLanguage: "All",
+    repos: null,
+    error: null,
+  };
 
-    constructor(props) {
-        super(props);
+  componentDidMount() {
+    // fetchPopularRepos
+    this.updateLanguage(this.state.selectedLanguage);
+  }
 
-        this.state = {
-            selectedLanguage: "All",
-            repos: null,
-            error: null
-        }
+  updateLanguage = (selectedLanguage) => {
+    this.setState({
+      selectedLanguage,
+      error: null,
+    });
 
-        this.updateLanguage = this.updateLanguage.bind(this)
-    }
-    
-    componentDidMount() {
-        // fetchPopularRepos
-        this.updateLanguage(this.state.selectedLanguage)
-    }
-
-    updateLanguage(selectedLanguage) {
+    fetchPopularRepos(selectedLanguage)
+      .then((repos) =>
         this.setState({
-            selectedLanguage,
-            error: null
+          repos,
+          error: null,
         })
+      )
+      .catch((error) => {
+        console.warn("Error fetching repos: ", error);
 
-        fetchPopularRepos(selectedLanguage)
-            .then((repos) =>
-                this.setState({
-                    repos,
-                    error: null
-                })).catch((error) => {
-                console.warn("Error fetching repos: ", error);
+        this.setState({
+          error: `There was an error fetching the repos`,
+        });
+      });
+  };
 
-                this.setState({
-                    error: `There was an error fetching the repos`,
-                })
-            })
-    }
+  render() {
+    const { selectedLanguage, repos, error } = this.state;
 
+    return (
+      <main className="stack main-stack animate-in">
+        <div className="split">
+          <h1>Popular</h1>
+          <LanguagesNav
+            selected={selectedLanguage}
+            onUpdateLanguage={this.updateLanguage}
+          />
+        </div>
 
-    render() {
+        {error && <p className="text-center error">{error}</p>}
 
-        const {selectedLanguage, repos, error } = this.state
-
-        return (
-            <main className="stack main-stack animate-in">
-                <div className="split">
-                    <h1>Popular</h1>
-                    <LanguagesNav 
-                        selected = {selectedLanguage}
-                        onUpdateLanguage = {this.updateLanguage}
-                    />
-                </div>
-            
-                
-                {error && <p className="text-center error">{error}</p>}
-
-                {repos && <Table repos={repos}/>}
-            </main>
-        )
-    }
+        {repos && <Table repos={repos} />}
+      </main>
+    );
+  }
 }
